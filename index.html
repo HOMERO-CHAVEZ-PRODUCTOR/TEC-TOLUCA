@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRADUACIÓN | TEC TOLUCA 2026</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Actor&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Paleta Olivo & Ivory del Conceptual */
+            --unitec-green: #636B2F;   
+            --dark-bg: #0a0a0a;      
+            --ivory: #F8F9F5;      
+            --gold-accent: #CFA249; 
+            --white: #ffffff;
+            --transition-smooth: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* --- ARQUITECTURA BASE --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            background-color: var(--dark-bg);
+            font-family: 'Inter', sans-serif;
+            color: var(--ivory); 
+            line-height: 1.8; 
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Capa de Fondo General con Granulado Tenue y Degradado */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            /* Granulado tenue sobre degradado */
+            background-image: 
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3%3Ffilter id='noiseFilter'%3%3FfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3%3F/filter%3%3F%3Frect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3%3F/svg%3%3F"),
+                linear-gradient(180deg, var(--dark-bg) 0%, var(--unitec-green) 100%);
+            background-attachment: fixed;
+            opacity: 0.04; /* Opacidad del granulado tenue */
+            z-index: -3;
+        }
+
+        /* Degradado de fondo separado para mantener el granulado */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(180deg, var(--dark-bg) 0%, var(--unitec-green) 100%);
+            background-attachment: fixed;
+            z-index: -4;
+        }
+
+        /* --- CAPA DE CÍRCULOS SUPERPUESTOS CON OPACIDAD REDUCIDA --- */
+        .decor-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .circle-group {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .c-unit {
+            position: absolute;
+            border-radius: 50%;
+            background-color: var(--ivory);
+        }
+
+        /* Opacidades reducidas un poco más */
+        .c-4 { width: 100%; height: 100%; opacity: 0.15; } /* Antes 0.2 */
+        .c-3 { width: 75%; height: 75%; opacity: 0.35; }  /* Antes 0.4 */
+        .c-2 { width: 50%; height: 50%; opacity: 0.55; }  /* Antes 0.6 */
+        .c-1 { width: 25%; height: 25%; opacity: 0.75; }  /* Antes 0.8 */
+
+        /* Distribución desorganizada */
+        .g-1 { width: 450px; height: 450px; top: -120px; left: -80px; }
+        .g-2 { width: 350px; height: 350px; bottom: 12%; right: -100px; }
+        .g-3 { width: 250px; height: 250px; top: 45%; left: 80%; }
+        .g-4 { width: 300px; height: 300px; bottom: -60px; left: 15%; }
+
+        /* --- TIPOGRAFÍA ACTOR --- */
+        h1, h2, h3 {
+            font-family: 'Actor', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            font-weight: normal;
+            color: var(--gold-accent);
+        }
+
+        /* --- ANIMACIONES --- */
+        @keyframes reveal {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .reveal-node { opacity: 0; animation: reveal 1.8s ease forwards; }
+
+        /* --- PORTADA --- */
+        header {
+            position: relative;
+            min-height: 100vh;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            text-align: center;
+            padding: 40px;
+        }
+
+        .hero-vignette {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 20%, var(--dark-bg) 100%);
+            z-index: 1;
+        }
+
+        header div:last-child { position: relative; z-index: 10; max-width: 900px; }
+        header h1 { font-size: clamp(2.5rem, 11vw, 5.5rem); margin-bottom: 15px; }
+        header p { font-size: 1.2rem; letter-spacing: 15px; color: var(--ivory); font-weight: 300; margin-top: 25px; opacity: 0.8; }
+        header hr { width: 140px; height: 1px; border: none; background: var(--gold-accent); margin: 40px auto; opacity: 0.6; }
+
+        /* --- CONTENIDO PRINCIPAL --- */
+        main {
+            position: relative;
+            padding: 120px 20px;
+            text-align: center;
+            z-index: 100;
+        }
+
+        .intro-block { 
+            max-width: 800px; 
+            margin: 0 auto 90px; 
+            font-size: 1.4rem; 
+            font-weight: 300; 
+            line-height: 2.4; 
+        }
+        
+        .date-display {
+            display: inline-flex;
+            gap: 50px;
+            font-size: clamp(2.8rem, 12vw, 5.2rem);
+            padding: 35px 100px;
+            margin-bottom: 120px;
+            border-top: 1px solid rgba(248, 249, 245, 0.2);
+            border-bottom: 1px solid rgba(248, 249, 245, 0.2);
+            color: var(--white);
+        }
+
+        /* --- UBICACIÓN --- */
+        .location-section {
+            max-width: 850px;
+            margin: 0 auto 150px;
+        }
+        .location-section h3 { font-size: 2.8rem; margin-bottom: 25px; }
+        .location-section p { font-size: 1.4rem; margin-bottom: 60px; font-weight: 300; }
+
+        .btn-gold {
+            display: inline-block;
+            padding: 25px 90px;
+            border: 1px solid var(--gold-accent);
+            color: var(--gold-accent);
+            text-decoration: none;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            transition: var(--transition-smooth);
+            background: transparent;
+        }
+        .btn-gold:hover { background: var(--gold-accent); color: var(--dark-bg); transform: scale(1.05); }
+
+        /* --- ITINERARIO UNIFORME --- */
+        .timeline-box {
+            max-width: 750px;
+            margin: 160px auto;
+            padding: 0 25px;
+        }
+        .timeline-box h3 { font-size: 3.2rem; margin-bottom: 100px; text-align: center; }
+
+        .timeline-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 0;
+            border-bottom: 1px solid rgba(248, 249, 245, 0.1);
+        }
+
+        .timeline-item span:first-child { 
+            font-weight: 600; 
+            color: var(--gold-accent); 
+            min-width: 150px; 
+            text-align: left; 
+            font-family: 'Actor', sans-serif;
+            font-size: 1.2rem;
+        }
+        .timeline-item span:last-child { text-align: right; font-weight: 300; font-size: 1.3rem; }
+
+        /* --- RECOMENDACIONES --- */
+        .recs-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 50px;
+            padding: 120px 20px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .rec-item {
+            padding: 60px;
+            background: rgba(10, 15, 8, 0.5);
+            border-left: 4px solid var(--gold-accent);
+            text-align: left;
+            backdrop-filter: blur(15px);
+        }
+        .rec-item strong { display: block; margin-bottom: 20px; font-family: 'Actor', sans-serif; font-size: 1.2rem; color: var(--gold-accent); }
+        .rec-item p { font-size: 1.1rem; font-weight: 300; opacity: 0.85; }
+
+        /* --- CONTROL AUDIO --- */
+        #music-btn {
+            position: fixed; bottom: 50px; right: 50px; width: 80px; height: 80px;
+            border-radius: 50%; z-index: 5000; border: 1px solid var(--gold-accent);
+            background: rgba(0, 0, 0, 0.9); cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 2rem;
+            transition: var(--transition-smooth); color: var(--gold-accent);
+        }
+
+        footer { 
+            padding: 140px 20px; 
+            text-align: center; 
+            border-top: 1px solid rgba(248, 249, 245, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .date-display { gap: 30px; padding: 25px 50px; }
+            .timeline-item { flex-direction: column; text-align: center; gap: 15px; }
+            .timeline-item span:first-child { text-align: center; }
+            .circle-group { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="decor-layer">
+        <div class="circle-group g-1"><div class="c-unit c-4"></div><div class="c-unit c-3"></div><div class="c-unit c-2"></div><div class="c-unit c-1"></div></div>
+        <div class="circle-group g-2"><div class="c-unit c-4"></div><div class="c-unit c-3"></div><div class="c-unit c-2"></div><div class="c-unit c-1"></div></div>
+        <div class="circle-group g-3"><div class="c-unit c-4"></div><div class="c-unit c-3"></div><div class="c-unit c-2"></div><div class="c-unit c-1"></div></div>
+        <div class="circle-group g-4"><div class="c-unit c-4"></div><div class="c-unit c-3"></div><div class="c-unit c-2"></div><div class="c-unit c-1"></div></div>
+    </div>
+
+    <audio id="gradAudio" loop preload="auto">
+        <source src="free fall.m4a" type="audio/mp4">
+    </audio>
+    <button id="music-btn" onclick="gestionarMusica()">🔇</button>
+
+    <header>
+        <div class="hero-vignette"></div>
+        <div class="reveal-node">
+            <h1>TEC TOLUCA</h1>
+            <hr>
+            <p>GENERACIÓN 2026</p>
+        </div>
+    </header>
+
+    <main>
+        <div class="intro-block reveal-node">
+            "Acompáñanos a celebrar el éxito de una trayectoria impecable y el comienzo de un futuro brillante. Una velada diseñada para esculpir recuerdos en el corazón de nuestra generación."
+        </div>
+
+        <div class="date-display reveal-node">
+            <span>30</span> <span>05</span> <span>26</span>
+        </div>
+
+        <div class="location-section reveal-node">
+            <h3>JARDÍN SAN HIPÓLITO</h3>
+            <p>Sede de nuestra celebración académica</p>
+            <a href="https://www.google.com/maps/place/Jardín+San+Hipólito/@19.2907499,-99.4672738,1053m/data=!3m2!1e3!4b1!4m6!3m5!1s0x85cdf5db16db0781:0x9cf462c1aafeab4c!8m2!3d19.2907449!4d-99.4646989!16s%2Fg%2F11bxjs7dzw?entry=ttu&g_ep=EgoyMDI2MDQyOC4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="btn-gold">Ver Ubicación</a>
+        </div>
+
+        <article class="timeline-box reveal-node">
+            <h3>Itinerario</h3>
+            <div class="timeline-item"><span>07:00 PM</span><span>RECEPCIÓN / SAXOFÓN</span></div>
+            <div class="timeline-item"><span>08:00 PM</span><span>CENA / VIOLÍN</span></div>
+            <div class="timeline-item"><span>09:05 PM</span><span>PALABRAS DE GENERACIÓN</span></div>
+            <div class="timeline-item"><span>09:10 PM</span><span>BRINDIS DE HONOR</span></div>
+            <div class="timeline-item"><span>09:15 PM</span><span>APERTURA DE PISTA</span></div>
+            <div class="timeline-item"><span>12:00 AM</span><span>TORNAFIESTA</span></div>
+            <div class="timeline-item"><span>03:00 AM</span><span>SORPRESA ANIMADA (SOPAS)</span></div>
+            <div class="timeline-item"><span>04:00 AM</span><span>FIN DEL EVENTO</span></div>
+        </article>
+    </main>
+
+    <aside class="recs-container reveal-node">
+        <div class="rec-item"><strong>CLIMA Y PROTECCIÓN</strong><p>Le sugerimos encarecidamente tomar precauciones e ir abrigados ante el clima del lugar.</p></div>
+        <div class="rec-item"><strong>ACCESO ÚNICO</strong><p>Considere que el recinto cuenta con un solo acceso habilitado para la entrada de invitados.</p></div>
+        <div class="rec-item"><strong>VALET PARKING</strong><p>Servicio externo profesional disponible con costo adicional por vehículo.</p></div>
+        <div class="rec-item"><strong>ÁREAS DE FUMAR</strong><p>Recordamos que el consumo de tabaco está restringido exclusivamente a las zonas exteriores.</p></div>
+        <div class="rec-item"><strong>MENÚS ESPECIALES</strong><p>Favor de reportar dietas especiales o alergias al comité organizador con anticipación.</p></div>
+        <div class="rec-item"><strong>KIT Y GUARDARROPA</strong><p>No contamos con servicio de guardarropa. El kit de graduado será entregado al ingresar.</p></div>
+    </aside>
+
+    <footer>
+        <h2 class="reveal-node">TEC TOLUCA</h2>
+        <p class="reveal-node">CLASE 2026</p>
+    </footer>
+
+    <script>
+        const audio = document.getElementById('gradAudio');
+        const btn = document.getElementById('music-btn');
+
+        function gestionarMusica() {
+            if (audio.paused) { audio.play(); btn.innerHTML = "🔊"; } 
+            else { audio.pause(); btn.innerHTML = "🔇"; }
+        }
+
+        document.body.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play().then(() => { btn.innerHTML = "🔊"; }).catch(e => {});
+            }
+        }, { once: true });
+    </script>
+</body>
+</html>
